@@ -1,0 +1,242 @@
+﻿@page
+@model StudentManagementSystem.Pages.CreateModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Register Student</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fb;
+            color: #1e293b;
+        }
+
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            background: #172554;
+            color: white;
+            padding: 30px 20px;
+        }
+
+            .sidebar h2 {
+                font-size: 21px;
+                margin-bottom: 45px;
+            }
+
+            .sidebar a {
+                display: block;
+                color: white;
+                text-decoration: none;
+                padding: 14px;
+                margin-bottom: 10px;
+                border-radius: 8px;
+                background: #1e3a8a;
+            }
+
+        .main {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .form-container {
+            max-width: 750px;
+            margin: 20px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #0000000a;
+        }
+
+            .form-container h1 {
+                margin-top: 0;
+                margin-bottom: 10px;
+            }
+
+        .description {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+            input:focus {
+                outline: none;
+                border-color: #2563eb;
+            }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        button, .cancel {
+            padding: 13px 22px;
+            border: none;
+            border-radius: 7px;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+        }
+
+            button:hover {
+                background: #1d4ed8;
+            }
+
+        .cancel {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .validation {
+            color: #dc2626;
+            margin-bottom: 20px;
+        }
+
+        @@media (max-width: 700px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+                .sidebar h2 {
+                    margin-bottom: 15px;
+                }
+
+            .main {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .form-container {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <h2>Student System</h2>
+        <a href="/">Dashboard</a>
+        <a href="/Create">Register Student</a>
+    </aside>
+
+    <main class="main">
+
+        <div class="form-container">
+
+            <h1>Register New Student</h1>
+
+            <p class="description">
+                Enter the student's information below.
+            </p>
+
+            <form method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div class="validation">
+                    @Html.ValidationSummary(false)
+                </div>
+
+                <div class="form-group">
+                    <label for="FirstName">First Name</label>
+                    <input id="FirstName"
+                           name="Student.FirstName"
+                           value="@Model.Student.FirstName"
+                           required
+                           minlength="2"
+                           maxlength="50" />
+                </div>
+
+                <div class="form-group">
+                    <label for="LastName">Last Name</label>
+                    <input id="LastName"
+                           name="Student.LastName"
+                           value="@Model.Student.LastName"
+                           required
+                           minlength="2"
+                           maxlength="50" />
+                </div>
+
+                <div class="form-group">
+                    <label for="EnrollmentNumber">Enrollment Number</label>
+                    <input id="EnrollmentNumber"
+                           name="Student.EnrollmentNumber"
+                           value="@Model.Student.EnrollmentNumber"
+                           required
+                           maxlength="20" />
+                </div>
+
+                <div class="form-group">
+                    <label for="Email">Email Address</label>
+                    <input id="Email"
+                           name="Student.Email"
+                           type="email"
+                           value="@Model.Student.Email"
+                           required />
+                </div>
+
+                <div class="form-group">
+                    <label for="Career">Career</label>
+                    <input id="Career"
+                           name="Student.Career"
+                           value="@Model.Student.Career"
+                           required
+                           maxlength="100" />
+                </div>
+
+                <div class="buttons">
+                    <button type="submit">
+                        Register Student
+                    </button>
+
+                    <a href="/" class="cancel">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
