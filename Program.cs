@@ -1,4 +1,4 @@
-
+using StudentManagementSystem.Services;
 using Supabase.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,6 +44,7 @@ builder.Services.AddSupabase(
 );
 
 builder.Services.AddAuthorization();
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 var app = builder.Build();
 

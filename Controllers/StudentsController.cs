@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementSystem.Models;
+using StudentManagementSystem.Services;
 
 namespace StudentManagementSystem.Controllers
 {
@@ -8,34 +9,24 @@ namespace StudentManagementSystem.Controllers
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        private readonly Supabase.Client _supabase;
+        private readonly IStudentService _studentService;
 
-        public StudentsController(Supabase.Client supabase)
+        public StudentsController(IStudentService studentService)
         {
-            _supabase = supabase;
+            _studentService = studentService;
         }
 
-        // GET: api/students
         [HttpGet]
         public async Task<IActionResult> GetStudents()
         {
-            var response = await _supabase
-                .From<Student>()
-                .Get();
-
-            return Ok(response.Models);
+            var students = await _studentService.GetAllStudents();
+            return Ok(students);
         }
 
-        // GET: api/students/1
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudent(long id)
         {
-            var response = await _supabase
-                .From<Student>()
-                .Where(s => s.Id == id)
-                .Get();
-
-            var student = response.Models.FirstOrDefault();
+            var student = await _studentService.GetStudentById(id);
 
             if (student == null)
                 return NotFound("Student not found.");
@@ -43,63 +34,35 @@ namespace StudentManagementSystem.Controllers
             return Ok(student);
         }
 
-        // POST: api/students
         [HttpPost]
         public async Task<IActionResult> CreateStudent(Student student)
         {
-            student.Id = 0;
-
-            var response = await _supabase
-                .From<Student>()
-                .Insert(student);
-
-            return Ok(response.Models);
+            var createdStudent = await _studentService.CreateStudent(student);
+            return Ok(createdStudent);
         }
 
-        // PUT: api/students/1
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStudent(
             long id, Student updatedStudent)
         {
-            var response = await _supabase
-                .From<Student>()
-                .Where(s => s.Id == id)
-                .Get();
-
-            var student = response.Models.FirstOrDefault();
+            var student = await _studentService.UpdateStudent(
+                id, updatedStudent);
 
             if (student == null)
                 return NotFound("Student not found.");
-
-            student.FirstName = updatedStudent.FirstName;
-            student.LastName = updatedStudent.LastName;
-            student.EnrollmentNumber = updatedStudent.EnrollmentNumber;
-            student.Email = updatedStudent.Email;
-            student.Career = updatedStudent.Career;
-
-            await student.Update<Student>();
 
             return Ok(student);
         }
 
-        // DELETE: api/students/1
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStudent(long id)
         {
-            var response = await _supabase
-                .From<Student>()
-                .Where(s => s.Id == id)
-                .Get();
+            var deleted = await _studentService.DeleteStudent(id);
 
-            var student = response.Models.FirstOrDefault();
-
-            if (student == null)
+            if (!deleted)
                 return NotFound("Student not found.");
-
-            await student.Delete<Student>();
 
             return Ok("Student deleted successfully.");
         }
     }
 }
-
